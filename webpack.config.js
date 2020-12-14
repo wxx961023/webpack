@@ -25,7 +25,7 @@ module.exports = {
         },
         exclude: /node_modules/
       },
-      {
+      { // css处理
         test: /\.(le|c)ss$/,
         use: ['style-loader', 'css-loader', {
           loader: 'postcss-loader',
@@ -33,12 +33,27 @@ module.exports = {
             plugins: function () {
               return [
                 require('autoprefixer')()
-              ]
+              ];
             }
           }
         }, 'less-loader'],
         exclude: /node_modules/
       },
+      { // 图片处理
+        test: /\.(png|jpg|gif|jpeg|webp|svg|eot|ttf|woff|woff2)$/,
+        use: [
+          {
+            loader: 'url-loader',
+            options: {
+              limit: 10240, //资源大小小于 10K 时，将资源转换为 base64，超过 10K，将图片拷贝到 dist 目录。
+              esModule: false, //默认不启用
+              name: '[name]_[hash:6].[ext]',
+              outputPath: 'assets'
+            }
+          }
+        ],
+        exclude: /node_modules/
+      }
     ]
   },
   plugins: [
@@ -60,4 +75,4 @@ module.exports = {
     compress: true //是否启用 gzip 压缩
   }
 
-}
+};
